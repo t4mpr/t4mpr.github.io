@@ -1,0 +1,379 @@
+---
+title: 'MetaCTF - Digital Forensics Walkthroughs'
+description: 'Beginner-friendly digital forensics challenges covering file analysis, network captures, steganography, and basic DFIR techniques. Start here if you are new to digital forensics!'
+date: 2025-01-15
+tags: ['dfir', 'forensics', 'wireshark', 'steganography', 'metacft', 'beginner-friendly']
+authors: ['t4mpr']
+---
+
+## Introduction
+
+This collection covers MetaCTF On Demand Labs - a series of digital forensics challenges perfect for beginners. These walkthroughs demonstrate fundamental DFIR techniques including file analysis, network packet inspection, metadata extraction, and basic steganography.
+
+**Difficulty**: Beginner to Intermediate  
+**Skills Covered**: File type identification, Wireshark, exiftool, base64 encoding, hex editors, SQLite forensics
+
+---
+
+## I've Got The Magic
+
+![Magic In Me](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/Magic_In_Me.png?raw=true)
+
+File provided: `magicinme`
+
+### Solution
+
+By typing `file magicinme` into our terminal - we discover the file type without the file having the correct extension (i.e .7z or .zip).
+
+We then add the correct extension to the file:
+
+```bash
+mv magicinme magicinme.7z
+```
+
+![Magic In Me 1](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/Magic_In_Me_1.png?raw=true)
+
+Then, we unzip with:
+
+```bash
+7z e magicinme.7z
+```
+
+![Magic In Me 2](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/Magic_In_Me_2.png?raw=true)
+
+Open the file with `xdg-open flag.jpg`
+
+![Magic In Me 3](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/Magic_In_Me_3.png?raw=true)
+
+**Key Takeaway**: The `file` command identifies file types by analyzing magic bytes, not file extensions.
+
+---
+
+## Forensics, Here I Come
+
+![Here I Come](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/Here_I_come_.png?raw=true)
+
+```bash
+xxd -l 2 [filename]
+```
+
+**Breakdown of the command:**
+- `xxd`: Creates a hex dump of a file
+- `-l 2`: Limits the output to the first 2 bytes
+- `[filename]`: The file you want to examine
+
+**Example output for a Windows executable:**
+
+![Here I Come 1](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/Here_I_come_1.png?raw=true)
+
+**Key Takeaway**: The magic bytes `4D 5A` (MZ) identify Windows PE executables.
+
+---
+
+## Can PowerShell Please Join Us On the Stage?
+
+![Can Powershell Please](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/Can_Powershell_Plz.png?raw=true)
+
+To solve this we take the base64 encoded blob and throw it into [CyberChef](https://gchq.github.io/CyberChef/) selecting `From Base64` and dragging it into the `Recipe` Section.
+
+![Can Powershell Please 1](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/Can_Powershell_Plz_1.png?raw=true)
+
+In PowerShell, the flag `-eC` (or `-EncodedCommand`) tells PowerShell to expect the following argument as a Base64-encoded string that represents the script/command to run.
+
+Use the recipe:
+1. `From Base64`
+2. `Decode Text UTF-16LE (1200)`
+
+**Key Takeaway**: PowerShell `-EncodedCommand` uses UTF-16LE encoded Base64 to obfuscate malicious commands.
+
+---
+
+## On The Wire
+
+![On The Wire](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/On_The_Wire.png?raw=true)
+
+Opening the provided `.pcap` file in Wireshark shows plaintext unencrypted credentials in the packet stream.
+
+![On The Wire 2](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/On_The_Wire_2.png?raw=true)
+
+**Key Takeaway**: Never transmit credentials over unencrypted protocols. Always use TLS/SSL.
+
+---
+
+## Anonymoose
+
+![Anonymoose](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/Anonymoose.png?raw=true)
+
+Using exiftool we are able to view the metadata in the provided PDF:
+
+```bash
+exiftool D34DM0053_Open_Letter_Mental_Health.pdf
+```
+
+![Anonymoose 1](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/Anonymoose_1.png?raw=true)
+
+**Key Takeaway**: Document metadata often contains valuable information about the creator, software used, and editing history.
+
+---
+
+## runCAPTCHA
+
+![runCAPTCHA](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/runCAPTCHA.png?raw=true)
+
+Visiting the provided URL - Right click > Inspect brings up Google Chrome's Developer Tools.
+
+We find a function that looks suspicious:
+
+![runCAPTCHA 2](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/runCAPTCHA_2.png?raw=true)
+
+From here we take this Base64 blob and bring it into [CyberChef](https://gchq.github.io/CyberChef/) using the `From Base64` and `Decode Text UTF-16LE (1200)` recipes.
+
+From here we find the malicious URL and our flag:
+
+![runCAPTCHA 3](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/runCAPTCHA_3.png?raw=true)
+
+**Key Takeaway**: JavaScript can be obfuscated using Base64 encoding to hide malicious URLs and behavior.
+
+---
+
+## Browser, Wowser
+
+![Browser Wowser](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/Browser_Wowser.png?raw=true)
+
+Knowing what we are looking for `"MetaCTF"`, we can use strings to extract the flag with minimal effort:
+
+```bash
+strings places.sqlite | grep MetaCTF{
+```
+
+![Browser Wowser 2](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/Browser_Wowser_2.png?raw=true)
+
+**Key Takeaway**: Browser artifacts like `places.sqlite` (Firefox) contain browsing history that can be extracted with forensic tools or simple string searches.
+
+---
+
+## Spam to Ham
+
+![Spam to Ham Challenge](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/spam_to_ham_chal.png?raw=true)
+
+This challenge gives us an email that was intercepted with base64 encoded contents. Inspecting the file reveals a clue: `I've attached an image in this email`.
+
+![Spam to Ham Email](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/spam_to_ham_email.png?raw=true)
+
+Taking the large base64 encoded blob and putting it into CyberChef shows PNG magic bytes.
+
+![Spam to Ham CyberChef](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/spam_to_ham_cyberchef.png?raw=true)
+
+Copy the base64 into a file named `flag.64`:
+
+![Spam Not Ham 1](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/spam_not_ham_1.png?raw=true)
+
+Decode it:
+
+```bash
+base64 -d flag.64 > flag_64.png
+file flag_64.png
+```
+
+![Spam Not Ham 2](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/spam_not_ham_2.png?raw=true)
+
+![Spam Not Ham 3](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/spam_not_ham_3.png?raw=true)
+
+![Spam Not Ham](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/spam_not_ham.png?raw=true)
+
+**Key Takeaway**: Email attachments can be embedded as base64-encoded content in the message body.
+
+---
+
+## Flags Over The Wire
+
+![Flags Over The Wire Challenge](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/flags_over_the_wire_chal.png?raw=true)
+
+1. Open the PCAP in Wireshark
+2. In the menu: **File → Export Objects → FTP-DATA...**
+
+![Flags Over The Wire 1](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/flags_over_the_wire_1.png?raw=true)
+
+3. Select `flags.zip` and click **Save...**
+
+![Flags Over The Wire 2](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/flags_over_the_wire_2.png?raw=true)
+
+4. Unzip and find `flags.png`
+
+![Flags Over The Wire 3](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/flags_over_the_wire_3.png?raw=true)
+
+**Key Takeaway**: Wireshark can automatically extract files transferred over various protocols (HTTP, FTP, SMB, etc.) using the Export Objects feature.
+
+---
+
+## Corruption
+
+![Corruption Challenge](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/corruption_chal.png?raw=true)
+
+>"Oh no! I tried downloading a picture for my upcoming conference talk but it won't open! Can you see if you can fix it and open it?"
+
+Use `file` to identify file type:
+
+```bash
+file corrupted.png
+```
+
+![Corruption 1](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/corruption_1.png?raw=true)
+
+It looks like a PDF! Use `pdfimages` to extract images:
+
+```bash
+pdfimages -list corrupted.png
+mkdir -p recovered/pdfimages && pdfimages -all corrupted.png recovered/pdfimages/img
+```
+
+![Corruption 2](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/corruption_2.png?raw=true)
+
+Opening the recovered PNG reveals the flag:
+
+![Corruption Solve](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/Corruption_solve.png?raw=true)
+
+**Key Takeaway**: File format corruption can often be fixed by understanding the file structure and manually repairing magic bytes or headers.
+
+---
+
+## All Your Files are Mine
+
+![All Your Files Challenge](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/all_your_files_chal.png?raw=true)
+
+Use `file` to identify the file type:
+
+```bash
+file abc.xyz
+```
+
+![All Your Files 1](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/all_your_files_1.png?raw=true)
+
+It's a zip file! Rename and extract:
+
+```bash
+mv abc.xyz abc.xyz.zip
+7z e abc.xyz.zip
+```
+
+![All Your Files 2](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/all_your_files_2.png?raw=true)
+
+Open `evil_plan.txt` to find the flag:
+
+![All Your Files Solve](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/all_your_files_solve.png?raw=true)
+
+**Key Takeaway**: Malicious actors often disguise file types using incorrect extensions. Always verify with the `file` command.
+
+---
+
+## Top Secret
+
+![Top Secret Challenge](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/top_secret_chal.png?raw=true)
+
+> "The folks at NSA got too tired of having to physically print out and redact documents, so they decided to try a new digital tool. Check out how good it is at doing its job on this redacted document."
+
+![Top Secret 1](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/top_secret_1.png?raw=true)
+
+The PDF only overlays black rectangles in its content stream; the underlying JPEG still contains the unredacted text, so direct image extraction bypasses the redaction:
+
+```bash
+pdfimages -all Nuclear_Codes_REDACTED.pdf img
+```
+
+![Top Secret 2](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/top_secret_2.png?raw=true)
+
+Use OCR to extract text:
+
+```bash
+tesseract img-000.jpg stdout
+```
+
+![Top Secret 3](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/top_secret_3.png?raw=true)
+
+Or just open the jpg manually:
+
+![Top Secret Solve](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/top_secret_solve.png?raw=true)
+
+**Key Takeaway**: Improper redaction techniques (like overlaying black boxes) don't actually remove sensitive information from documents. Proper redaction requires permanently removing the data.
+
+---
+
+## Remote Data Pwnage 2 (Part 1)
+
+![RDP Challenge](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/remote_data_pwnage_chal.png?raw=true)
+
+> "A malicious actor compromised a machine on our network and used it as a proxy to perform other attacks and connect to other machines. Our IR team managed to recover a partial file system dump of that machine. Take a look and see if you can reconstruct anything useful."
+
+Looking in `C:\Administrator\AppData\Local\Microsoft\Terminal Server Client\Cache\` we find a `.bin` file:
+
+![RDP 1](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/remote_data_pwnage_1.png?raw=true)
+
+We can use [bmc-tools.py](https://github.com/ANSSI-FR/bmc-tools/blob/master/bmc-tools.py) to extract thousands of image fragments:
+
+![RDP 2](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/remote_data_pwnage_2.png?raw=true)
+
+The entire collage looks like this:
+
+![RDP 3](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/remote_data_pwnage_3.bmp?raw=true)
+
+Very difficult to figure out what is going on here. For this, we use [RdpCacheStitcher](https://github.com/BSI-Bund/RdpCacheStitcher).
+
+This can be quite time consuming to piece together all of these individual frames:
+
+![RDP 4](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/remote_data_pwnage_4.png?raw=true)
+
+From here we can take frames and piece them together manually - like putting together pieces of a puzzle but for digital forensics:
+
+![RDP Solve](https://github.com/t4mpr/ctf-writeups/blob/main/MetaCTF-Walkthroughs/images/remote_data_pwnage_solve_PNG.png?raw=true)
+
+**Key Takeaway**: RDP cache files can be reconstructed to reveal what was displayed on screen during remote sessions, making them valuable artifacts in forensic investigations.
+
+---
+
+## Summary & Key Takeaways
+
+### Essential Tools for Digital Forensics
+- **file** - Identify file types by magic bytes
+- **xxd/hexdump** - Hex editors for low-level file analysis
+- **strings** - Extract readable strings from binary files
+- **exiftool** - Metadata extraction from documents and images
+- **CyberChef** - Swiss Army knife for encoding/decoding
+- **Wireshark** - Network traffic analysis and packet inspection
+- **SQLite Browser** - Examine browser history and application databases
+- **base64** - Decode Base64-encoded data
+
+### Forensic Concepts Covered
+1. **Magic Bytes**: File type identification independent of extension
+2. **Metadata Analysis**: Documents contain hidden information about creators and tools
+3. **Network Forensics**: Unencrypted protocols leak sensitive data
+4. **Browser Artifacts**: History databases preserve user activity
+5. **Obfuscation Techniques**: Base64 encoding commonly hides malicious content
+6. **File Carving**: Extract embedded or transferred files from larger datasets
+7. **File Repair**: Understanding file formats enables manual corruption fixes
+
+### Best Practices
+- Always verify file types with `file` command, not extensions
+- Use encrypted protocols (HTTPS, SFTP, SSH) for sensitive data transmission
+- Check document metadata before sharing to avoid information leakage
+- Understand common obfuscation techniques (Base64, hex encoding, compression)
+- Master CyberChef for quick encoding/decoding tasks
+- Practice with different file formats to recognize corruption patterns
+
+---
+
+## Conclusion
+
+These challenges provide an excellent introduction to digital forensics fundamentals. They demonstrate that many forensic tasks don't require specialized tools - often, standard Linux utilities combined with an understanding of file formats and protocols are sufficient.
+
+**Next Steps:**
+- Practice with more complex challenges involving memory forensics (Volatility)
+- Learn disk forensics with tools like Autopsy and FTK Imager
+- Explore malware analysis and reverse engineering
+- Study incident response frameworks (NIST, SANS)
+
+**Resources:**
+- [CyberChef](https://gchq.github.io/CyberChef/)
+- [Wireshark Documentation](https://www.wireshark.org/docs/)
+- [SANS DFIR Cheat Sheets](https://www.sans.org/security-resources/posters)
+
+Happy hunting! 🕵️‍♂️

@@ -1,0 +1,105 @@
+---
+title: 'CTF Speaker - Bluetooth Forensics & Morse Code'
+description: 'A Bluetooth forensics challenge involving AVDTP audio stream analysis and Morse code hidden in a waveform spectrogram.'
+date: 2025-01-20
+tags: ['forensics', 'bluetooth', 'morse-code', 'audio-analysis', 'nns-ctf', 'avdtp']
+authors: ['t4mpr']
+---
+
+## 🎧 CTF Speaker — NNS CTF 2025
+
+**Category:** Misc  
+**Points:** 454   
+**Flag Format:** `NNS{...}`  
+
+---
+
+## 📜 Challenge 
+
+![CTF Speaker Challenge](https://github.com/t4mpr/ctf-writeups/blob/main/ctf-speaker-writeup/images/ctf-speaker-pre-solve.png?raw=true)
+
+> "I heard some strange sounds at the last CTF I attended, so I got out my analyser. You may need the analyser software from:  
+> [Ellisys Better Analysis Tool](https://www.ellisys.com/better_analysis/bta_latest.htm)"
+
+File provided: `ctf-speaker.btt`
+
+---
+
+## 🔍 Step 1 — Inspecting the Capture
+
+After extracting the archive, I found a `.btt` file. This format is a proprietary Bluetooth trace used by **Ellisys Bluetooth Analyzer**.
+
+I opened the file in the [Ellisys Better Analysis](https://www.ellisys.com/better_analysis/bta_latest.htm) software and started examining the captured packets.
+
+- Filtering the trace showed **AVDTP Media Packets**, which corresponds to Bluetooth audio streaming.  
+- The software's **Audio playback feature** let me listen to the captured stream.  
+
+![Ellisys Bluetooth Analyzer](https://github.com/t4mpr/ctf-writeups/blob/main/ctf-speaker-writeup/images/Ellys_Bluetooth_Analyzer-1.png?raw=true)
+
+---
+
+## 🎶 Step 2 — Finding Suspicious Audio
+
+Listening through the playback, I noticed that around the **65s–100s** mark there were **beeps** that didn't sound like regular audio. These resembled **Morse code tones**.
+
+Rather than trying to figure out how to export ONLY this segment of the audio in this software (that I had never used before), I just exported the entire audio capture file.
+
+---
+
+## 🎛 Step 3 — Audio Processing
+
+To isolate the Morse code section more clearly:
+
+1. Loaded the exported full audio into **Ableton Live 12 Suite**.  
+2. Trimmed the clip down to only the suspicious beeps.  
+3. Verified that the tones were indeed structured enough to be Morse code.  
+4. EQ'd the audio so the beeps were more dominant in the audio file.
+
+![Ableton Audio Clip](https://github.com/t4mpr/ctf-writeups/blob/main/ctf-speaker-writeup/images/ableton-1.png?raw=true)
+
+5. Extracted 65s-100s from original audio export to a smaller, more digestible version.
+
+---
+
+## 🔑 Step 4 — Decoding the Morse
+
+I uploaded the clipped audio to [morsecode.world's adaptive decoder](https://morsecode.world/international/decoder/audio-decoder-adaptive.html).
+
+![Morse Code World](https://github.com/t4mpr/ctf-writeups/blob/main/ctf-speaker-writeup/images/morsecode.world.png?raw=true)
+
+- At first, the live text decoder produced **gibberish** (random letters).  
+
+![Morse Code Gibberish](https://github.com/t4mpr/ctf-writeups/blob/main/ctf-speaker-writeup/images/morse-code-gibberish.png?raw=true)
+
+- However, scrolling further down, the **spectrogram output** actually **drew letters visually**.
+
+![Morse Code Clear](https://github.com/t4mpr/ctf-writeups/blob/main/ctf-speaker-writeup/images/morse-code-1.png?raw=true)
+
+- There's the flag! Watching carefully while the audio played, it spelled out the flag in the correct flag format `NNS{...}`  
+
+![Flag Part 1](https://github.com/t4mpr/ctf-writeups/blob/main/ctf-speaker-writeup/images/flag-pt-1.png?raw=true)
+![Flag Part 2](https://github.com/t4mpr/ctf-writeups/blob/main/ctf-speaker-writeup/images/flag-pt-2.png?raw=true)
+![Flag Part 3](https://github.com/t4mpr/ctf-writeups/blob/main/ctf-speaker-writeup/images/flag-pt-3.png?raw=true)
+![Flag Part 4](https://github.com/t4mpr/ctf-writeups/blob/main/ctf-speaker-writeup/images/flag-pt-4.png?raw=true)
+
+---
+
+## 🏁 Step 5 — Submit The Flag!
+
+We got it! After typing the flag into a text editor from watching it draw out while listening to the audio on [morsecode.world's adaptive decoder](https://morsecode.world/international/decoder/audio-decoder-adaptive.html), I went ahead and submitted the flag.
+
+![NNS CTF Solved](https://github.com/t4mpr/ctf-writeups/blob/main/ctf-speaker-writeup/images/nns-ctf-speaker.png?raw=true)
+
+That's it!  
+**Flag**: `NNS{5n1ff1ng_HCI_tO_pl4y_sOund}`
+
+---
+
+## Key Takeaways
+
+- **Bluetooth Forensics**: AVDTP (Audio/Video Distribution Transport Protocol) packets can contain hidden messages in audio streams
+- **Audio Steganography**: Morse code can be embedded in audio files as tone patterns
+- **Multi-Tool Analysis**: Sometimes the best approach is combining specialized tools (Ellisys for Bluetooth, Ableton for audio editing, online decoders for analysis)
+- **Visual Decoding**: When automated text decoding fails, visual spectrogram analysis can reveal hidden patterns
+
+I had a great time solving this challenge. Special thanks to my teammates at [Lil L3AK](https://ctftime.org/team/373171/) and [NNS CTF](https://nnsc.tf/) team for putting together some great challenges and overall, a fun and challenging CTF!

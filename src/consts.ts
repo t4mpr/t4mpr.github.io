@@ -1,14 +1,14 @@
 import type { IconMap, SocialLink, Site } from '@/types'
 
 export const SITE: Site = {
-  title: 'astro-erudite',
+  title: 't4mpr - CTF Writeups & Security Research',
   description:
-    'astro-erudite is a opinionated, unstyled blogging template—built with Astro, Tailwind, and shadcn/ui.',
-  href: 'https://astro-erudite.vercel.app',
-  author: 'jktrn',
+    'A collection of CTF writeups, walkthroughs, and security research covering forensics, cryptography, web security, and more.',
+  href: 'https://t4mpr.github.io',
+  author: 't4mpr',
   locale: 'en-US',
-  featuredPostCount: 2,
-  postsPerPage: 3,
+  featuredPostCount: 3,
+  postsPerPage: 20,
 }
 
 export const NAV_LINKS: SocialLink[] = [
@@ -28,16 +28,16 @@ export const NAV_LINKS: SocialLink[] = [
 
 export const SOCIAL_LINKS: SocialLink[] = [
   {
-    href: 'https://github.com/jktrn',
+    href: 'https://github.com/t4mpr',
     label: 'GitHub',
   },
   {
-    href: 'https://twitter.com/enscry',
-    label: 'Twitter',
+    href: 'https://linkedin.com/in/smosillo',
+    label: 'LinkedIn',
   },
   {
-    href: 'mailto:jason@enscribe.dev',
-    label: 'Email',
+    href: 'https://discordapp.com/users/780642255508865044',
+    label: 'Discord',
   },
   {
     href: '/rss.xml',
@@ -50,6 +50,7 @@ export const ICON_MAP: IconMap = {
   GitHub: 'lucide:github',
   LinkedIn: 'lucide:linkedin',
   Twitter: 'lucide:twitter',
+  Discord: 'lucide:message-circle',
   Email: 'lucide:mail',
   RSS: 'lucide:rss',
 }

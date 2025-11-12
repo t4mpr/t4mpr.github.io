@@ -19,7 +19,7 @@ import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-  site: 'https://astro-erudite.vercel.app',
+  site: 'https://t4mpr.github.io',
   integrations: [
     expressiveCode({
       themes: ['github-light', 'github-dark'],
@@ -74,7 +74,7 @@ export default defineConfig({
   },
   server: {
     port: 1234,
-    host: true,
+    host: '0.0.0.0',
   },
   devToolbar: {
     enabled: false,

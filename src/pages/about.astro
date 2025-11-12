@@ -16,31 +16,38 @@ const projects = await getAllProjects()
   <section>
     <div class="min-w-full">
       <div class="prose mb-8">
-        <p class="mt-0">
-          astro-erudite is an opinionated, unstyled static blogging template
-          that prioritizes simplicity and performance, built with <Link
-            href="https://astro.build"
-            external
-            underline>Astro</Link
-          >, <Link href="https://tailwindcss.com" external underline
-            >Tailwind</Link
-          >, and <Link href="https://ui.shadcn.com" external underline
-            >shadcn/ui</Link
-          >. It provides a clean foundation for your content while being
-          extremely easy to customize.
+        <h2 class="mt-0 text-2xl font-medium">About Me</h2>
+        <p>
+          I'm a security researcher and CTF player specializing in digital forensics, 
+          cryptography, and incident response. This site is a collection of my CTF writeups, 
+          walkthroughs, and security research covering various domains including forensics, 
+          cryptography, web security, and more.
         </p>
         <p>
-          To learn more about the philosophy behind this template, check out the
-          following blog post: <Link
-            href="/blog/the-state-of-static-blogs"
-            underline>The State of Static Blogs in 2024</Link
-          >.
+          My goal is to share knowledge and contribute to the cybersecurity community by 
+          documenting my problem-solving methodologies and insights. Whether you're a 
+          beginner looking to learn or an experienced practitioner seeking different 
+          perspectives, I hope these writeups provide value.
         </p>
-      </div>
-
-      <h2 class="mb-4 text-2xl font-medium">Example Projects Listing</h2>
-      <div class="flex flex-col gap-4">
-        {projects.map((project) => <ProjectCard project={project} />)}
+        <h3 class="text-xl font-medium">Areas of Focus</h3>
+        <ul>
+          <li><strong>Digital Forensics & Incident Response (DFIR)</strong> - Memory forensics, disk analysis, network traffic inspection</li>
+          <li><strong>Cryptography</strong> - Classical and modern crypto challenges, RSA attacks, hash functions</li>
+          <li><strong>Web Security</strong> - SQL injection, XSS, authentication bypass, API exploitation</li>
+          <li><strong>Binary Exploitation</strong> - Buffer overflows, format strings, ROP chains</li>
+          <li><strong>Steganography</strong> - Hidden data in images, audio, and documents</li>
+          <li><strong>OSINT</strong> - Open source intelligence gathering and analysis</li>
+        </ul>
+        <h3 class="text-xl font-medium">Connect</h3>
+        <p>
+          Feel free to reach out on <Link 
+            href="https://linkedin.com/in/smosillo" 
+            external 
+            underline>LinkedIn</Link> or check out my <Link 
+            href="https://github.com/t4mpr" 
+            external 
+            underline>GitHub</Link> for more projects and writeups.
+        </p>
       </div>
     </div>
   </section>

@@ -1,0 +1,117 @@
+---
+title: 'BuckeyeCTF 2025 - Bugle Walkthrough'
+description: 'A forensics and steganography challenge involving Morse code hidden in audio file timing and duration patterns.'
+date: 2025-10-26
+tags: ['forensics', 'steganography', 'morse-code', 'audio-analysis', 'buckeyectf']
+authors: ['t4mpr']
+---
+
+## Forensics / Bugle
+
+![Bugle Challenge](https://github.com/t4mpr/ctf-writeups/blob/main/BuckeyeCTF-2025-Writeups/images/Bugle_chal.png?raw=true)
+
+> Toby Vulpine must have had a stroke when he made this.
+>
+> Wrap the answer in `bctf{...}`, for example `bctf{myanswerhere}`
+
+File provided: [`Bugle.mp3`](https://github.com/t4mpr/ctf-writeups/blob/main/BuckeyeCTF-2025-Writeups/files/Bugle.mp3)
+
+This was a fun challenge. We're provided with an mp3 audio file that sounds like a trumpet playing a song. If we analyze the audio file through various spectrogram analysis tools, nothing obvious comes to mind.
+
+## Morse Code
+
+- Google defines **Morse code** as `an alphabet or code in which letters are represented by combinations of long and short signals of light or sound.`
+
+- **Morse Code** is a form of encoding that can be integrated into steganographic methods by hiding the Morse code signals within an innocuous "cover" medium in a way that conceals the very existence of a hidden message. It can be delivered in many formats: spikes in volume, light, patterns, tones...
+
+## Audio File Analysis
+
+We can start by simply listening to and viewing the audio in any DAW or audio visualization tool.
+
+- Let's start with Sonic Visualizer
+
+<img src="https://github.com/t4mpr/ctf-writeups/blob/main/BuckeyeCTF-2025-Writeups/images/Bugle_Sonic_1.png?raw=true" alt="Sonic Visualizer Analysis" width="70%" />
+
+Hmmm...Nothing too obvious here. However, we do see some clean breaks in-between notes. This could be an indicator that this may be morse code.
+
+> ##### When analyzing Morse Code, we need SOMETHING in between `-` and `.` - A space, a consistent break. Something to tell us where to separate each character.
+
+If we load this up into an online tool [MusicGram](https://musitools.xyz/musigram/), we see further confirmation of **Morse Code**:
+
+![MusicGram Analysis](https://github.com/t4mpr/ctf-writeups/blob/main/BuckeyeCTF-2025-Writeups/images/Bugle_MusicGram_Rawpng.png?raw=true)
+
+*"How is this Morse Code?"* You may ask...
+
+## Let's take a closer look...
+
+Load the .mp3 into your DAW *(Digital Audio Workstation)* of choice...
+- For this example, I use **Ableton 12**
+
+![Ableton Initial View](https://github.com/t4mpr/ctf-writeups/blob/main/BuckeyeCTF-2025-Writeups/images/Bugle_Ableton_1st.png?raw=true)
+
+##### Let's organize these notes by color and time & remove the negative space.
+
+![Chopped Audio](https://github.com/t4mpr/ctf-writeups/blob/main/BuckeyeCTF-2025-Writeups/images/Bugle_Chopped_2.png?raw=true)
+
+##### ...Now do you see it?
+
+﴾͡๏̯͡๏﴿ 
+
+![Ableton Organized View](https://github.com/t4mpr/ctf-writeups/blob/main/BuckeyeCTF-2025-Writeups/images/Bugle_Ableton_1.png?raw=true)
+
+#### ...How about now?
+
+![First Notes](https://github.com/t4mpr/ctf-writeups/blob/main/BuckeyeCTF-2025-Writeups/images/Bugle%20First%20Notes.png?raw=true)
+
+### Aha! NOW we're getting the hang of it! 
+
+( ━☞´◔‿ゝ◔`)━☞ 
+
+![Ableton Grid View](https://github.com/t4mpr/ctf-writeups/blob/main/BuckeyeCTF-2025-Writeups/images/Bugle_Ableton_small.png?raw=true)
+
+> In Ableton Grid view, a 1/4 of a bar is shown by zooming in. Notice the two different shades of grey and the amount of space(time) a green clip takes up compared to a green clip. If you're not familiar with Ableton, just think of one of those grey blocks as one quarter of a bar.
+
+##### I think we got it! 
+
+![Color-coded notes](https://github.com/t4mpr/ctf-writeups/blob/main/BuckeyeCTF-2025-Writeups/images/Bugle_Color_Chop.png?raw=true)
+
+- ##### <span style="color:#A370FF">Notes</span> that play for <span style="color:#A370FF">1/4 of a bar</span> represents a `-`  
+- ##### <span style="color:#39FF14">Notes</span> that play for <span style="color:#39FF14">1/8 of a bar</span> represent a `.` 
+
+I chopped each note individually and cut all of the negative space to isolate each character. This helped me visualize the `-`'s and `.`'s
+
+> I've included the [Chopped Bugle Audio](https://github.com/t4mpr/ctf-writeups/blob/main/BuckeyeCTF-2025-Writeups/files/Bugle_chopped.mp3) file here as well.
+
+If you go through the entire audio file, listening to each note and color-coding them for easy visualization, you'll end up with `-- --- .-. ... . .- .-.. .-.. .- .-.. --- -. --.`
+
+You can then use [CyberChef](https://gchq.github.io/CyberChef/#recipe=From_Morse_Code('Space','Line%20feed')&input=LS0gLS0tIC4tLiAuLi4gLiAuLSAuLS4uIC4tLi4gLi0gLi0uLiAtLS0gLS4gLS0u&ieol=CRLF) or another Morse Code Decoder to recover the decoded message.
+
+## Visual Representation
+
+![First Notes - MOR](https://github.com/t4mpr/ctf-writeups/blob/main/BuckeyeCTF-2025-Writeups/images/Bugle%20First%20Notes_MOR.png?raw=true)
+
+![Middle Notes - SEAL](https://github.com/t4mpr/ctf-writeups/blob/main/BuckeyeCTF-2025-Writeups/images/Bugle_Middle_Notes_SEAL.png?raw=true)
+
+![Middle Notes - LAL](https://github.com/t4mpr/ctf-writeups/blob/main/BuckeyeCTF-2025-Writeups/images/Bugle_Middle_Notes_LAL.png?raw=true)
+
+![Last Notes - ONG](https://github.com/t4mpr/ctf-writeups/blob/main/BuckeyeCTF-2025-Writeups/images/Bugle_LAST%20NOTES_Notes_ONG.png?raw=true)
+
+## Alternative Solution
+
+Rather than having to load the audio into a DAW, chop the notes up and color-code everything while manually listening and taking notes, you could use the [Musicgram spectrogram tool](https://musitools.xyz/musigram/) and decode the morse just by looking at it...
+
+But *"How?"* You may ask... 
+
+![Musicgram with annotations](https://github.com/t4mpr/ctf-writeups/blob/main/BuckeyeCTF-2025-Writeups/images/Bugle_Musicgram_Drawn.png?raw=true)
+
+![Musicgram with letters](https://github.com/t4mpr/ctf-writeups/blob/main/BuckeyeCTF-2025-Writeups/images/Bugle_Musicgram_Drawn_w_Letters.png?raw=true)
+
+## Solution
+
+The decoded message is: **MORSEALLALONG**
+
+**Flag**: `bctf{morseallalong}`
+
+---
+
+This challenge demonstrates how steganography can be combined with classical encoding techniques like Morse code to hide information in audio files. The key insight was recognizing that the duration of notes (1/4 bar vs 1/8 bar) encoded the dashes and dots of Morse code.
