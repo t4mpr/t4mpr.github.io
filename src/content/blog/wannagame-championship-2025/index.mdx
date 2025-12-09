@@ -162,7 +162,7 @@ strings pid.3000.dmp | grep -i "http://192.168"
 strings pid.3000.dmp | grep -B5 -A5 "captcha"
 # Output: http://192.168.1.11:7331/captcha.html
 ```
-<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/hide_and_seek_captcha.png?raw=true" alt="captcha" width="70%"/>
+<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/hide_and_seek_captcha.png?raw=true" alt="captcha" width="100%"/>
 
 **Answer:** `http://192.168.1.11:7331/captcha.html`
 
@@ -184,7 +184,7 @@ vol -f memdump.raw windows.registry.printkey \
   --key "Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU"
 ```
 <a href="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/hide_and_seek_powershell.png?raw=true" target="_blank">
-<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/hide_and_seek_powershell.png?raw=true" alt="powershell - Click to enlarge" width="70%"/>
+<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/hide_and_seek_powershell.png?raw=true" alt="powershell - Click to enlarge" width="100%"/>
 </a>
 
 2. Found base64-encoded PowerShell command:
@@ -240,7 +240,7 @@ Start-Process -FilePath $env:TEMP\file\verify.exe
 3. Identified that y.ps1 was downloaded and saved update.zip as kqwer.zip
 
 
-<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/hide_and_seek_question_4.png?raw=true" alt="script-zip" width="70%"/>
+<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/hide_and_seek_question_4.png?raw=true" alt="script-zip" width="100%"/>
 
 **Answer:** `http://192.168.1.11:7331/y.ps1_kqwer.zip`
 
@@ -283,7 +283,7 @@ Output showed the PowerShell command stored in RunMRU registry key.
 **Question:** Where was the suspicious file installed and what previous process and ID called this suspicious application? Example: `(C:\path\file\A_processA.ext_1234)`
 
 For this question, our script `VolGraph.py` is very helpful to visualize the process tree
-<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/hide_and_seek_pstree_2.png?raw=true" alt="pstree" width="70%"/>
+<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/hide_and_seek_pstree_2.png?raw=true" alt="pstree" width="100%"/>
 
 **Solution Process:**
 
@@ -307,7 +307,7 @@ strings dumped/file.0xb9f78070.0xbe1e9de0.ImageSectionObject.verify.exe.img
 # Injecting...
 # Check your meterpreter :D
 ```
-<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/hide_and_seek_strings.png?raw=true" alt="strings" width="70%"/>
+<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/hide_and_seek_strings.png?raw=true" alt="strings" width="100%"/>
 
 3. Identified injection target - explorer.exe (PID 6500)
 
@@ -340,7 +340,7 @@ vol -f memdump.raw windows.netscan | grep ESTABLISHED | grep "192.168.1.11"
 
 3. Verified this matches the attack infrastructure (192.168.1.11 was the download server)
 
-<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/hide_and_seek_IP_PORT.png?raw=true" alt="ip_port" width="70%"/>
+<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/hide_and_seek_IP_PORT.png?raw=true" alt="ip_port" width="100%"/>
 
 **Answer:** `192.168.1.11:64421`
 
@@ -379,7 +379,7 @@ vol -f memdump.raw windows.registry.printkey \
 ```
 Again here our helpful visualization volatility3 helper script [VolGraph.py](https://github.com/tr4c3datr4il/VolTool/blob/main/VolGraph.py) is helpful for visualizing the process tree
 
-<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/hide_and_seek_volgraph.png?raw=true" alt="volgraph" width="70%"/>
+<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/hide_and_seek_volgraph.png?raw=true" alt="volgraph" width="100%"/>
 
 **Answer:** `fodhelper.exe_5888`
 
@@ -570,7 +570,7 @@ The investigation required comprehensive memory forensics skills, MITRE ATT&CK f
 ---
 
 <a href="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/hide_and_seek_solve.png?raw=true" target="_blank">
-<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/hide_and_seek_solve.png?raw=true" alt="Solution Screenshot - Click to enlarge" width="70%"/>
+<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/hide_and_seek_solve.png?raw=true" alt="Solution Screenshot - Click to enlarge" width="100%"/>
 </a>
 
 ---
@@ -594,7 +594,7 @@ cd /mnt/c/ctf/_W1/forensics/where_is_the_malware
 cat C/Users/alex/Documents/for_meeting/ransom.txt
 ```
 
-<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/where_is_the_malware_ransom_note.png?raw=true" alt="Ransom Note" width="70%"/>
+<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/where_is_the_malware_ransom_note.png?raw=true" alt="Ransom Note" width="100%"/>
 
 This confirmed Alex's documents were encrypted and listed victim ID `63c4bc5d-6e89-43c3-b618-8d79351f6573`.
 
@@ -606,7 +606,7 @@ ls -al C/Users/alex/Downloads/EVKey
 ls -al C/Windows/prefetch | rg -i EVKAU
 ```
 
-<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/where_is_the_malware_ransom_EVKey.png?raw=true" alt="EVKey Traces" width="70%"/>
+<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/where_is_the_malware_ransom_EVKey.png?raw=true" alt="EVKey Traces" width="100%"/>
 
 The user recently ran `evkau.exe` (a fake EVKey installer) which likely staged the browser-based encryptor.
 
@@ -618,7 +618,7 @@ The user's Chrome cache still held the worker that performed encryption. Searchi
 rg -a "AES" -n C/Users/alex/AppData/Local/Google/Chrome/User\ Data/Default/Cache/Cache_Data/f_0004ab
 ```
 
-<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/where_is_the_malware_ransom_EVKey.png?raw=true" alt="AES Discovery" width="70%"/>
+<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/where_is_the_malware_ransom_EVKey.png?raw=true" alt="AES Discovery" width="100%"/>
 
 ##### *Or just look through it manually*
 
@@ -663,7 +663,7 @@ python3 /mnt/c/ctf/_W1/writeup/files/where_is_the_malware_decrypt.py \
     tmp/recovered/Bulbasaur.jpg
 ```
 
-<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/where_is_the_malware_decrypt.png?raw=true" alt="Decryption Process" width="70%"/>
+<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/where_is_the_malware_decrypt.png?raw=true" alt="Decryption Process" width="100%"/>
 
 I repeated for each file inside `Documents/for_meeting/`
 
@@ -671,11 +671,11 @@ I repeated for each file inside `Documents/for_meeting/`
 
 Once we have all the files for the `for_meeting` folder decrypted, we simply look through our decrypted files in `tmp/recovered/`
 
-<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/where_is_the_malware_for_meeting.png?raw=true" alt="Decrypted Files" width="70%"/>
+<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/where_is_the_malware_for_meeting.png?raw=true" alt="Decrypted Files" width="100%"/>
 
 Looking through our decrypted files, we come across this beautiful image `Bulbasaur.jpg`:
 
-<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/Bulbasaur.jpg?raw=true" alt="Bulbasaur with Flag" width="70%"/>
+<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/Bulbasaur.jpg?raw=true" alt="Bulbasaur with Flag" width="100%"/>
 
 ---
 
@@ -735,7 +735,7 @@ Looking through our decrypted files, we come across this beautiful image `Bulbas
 
 ### First Blood Achievement
 
-<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/where_is_the_malware_first_blood.png?raw=true" alt="First Blood" width="70%"/>
+<img src="https://github.com/t4mpr/ctf-writeups/blob/main/WannaGame-Championship-2025-Writeups/images/where_is_the_malware_first_blood.png?raw=true" alt="First Blood" width="100%"/>
 
 This writeup achieved **First Blood** on the challenge! 🩸
 
